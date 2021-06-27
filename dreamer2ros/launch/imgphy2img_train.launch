@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="model_path" doc="The absolute path to the weights of the network."/>
+  <arg name="namespace" default=""/>
+  <group ns="/$(arg namespace)">
+    <node pkg="dreamer2ros" name="train_imgphy2img" type="imgphy2img_train.py" output="screen">
+       <param name="model_path" type="string" value="$(arg model_path)"/>
+       <remap from="vel" to="velocity_proj/robot_frame"/>
+       <remap from="reward_generator/reward" to="reward_follow_shore/reward"/>
+       <remap from="reward_generator/DreamersView" to="reward_follow_shore/DreamersView"/>
+    </node>
+  </group>
+</launch>

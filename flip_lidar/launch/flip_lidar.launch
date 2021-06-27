@@ -1,0 +1,10 @@
+<launch>
+
+
+  <node pkg="flip_lidar" name="flip_lidar" type="flip_lidar_node" output="screen">
+    <param name="~/base_frame" type="string" value="kingfisher/laser"/>
+    <remap from="~/input_scan" to="/lidar/scan/filtered"/>
+    <remap from="~/output_scan" to="/lidar/scan/flipped"/>
+  </node>
+
+</launch>

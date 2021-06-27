@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<launch>
+    <node pkg="mag2rpy" name="mag2rpy" type="mag2rpy_node.py" output="screen">
+        <param name="path2statistics" type="string" value="$(find mag2rpy)/statistics.pkl"/> 
+        <param name="frame" type="string" value="imu"/> 
+        <param name="use_markers" type="bool" value="true"/> 
+    
+        <remap from="~mag"       to="/imu/mag"/>
+    </node>
+</launch>

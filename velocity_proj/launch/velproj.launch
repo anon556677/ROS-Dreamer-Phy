@@ -1,0 +1,9 @@
+<launch>
+  <arg name="namespace" default=""/>
+  <group ns="/$(arg namespace)">
+
+    <node name="velocity_proj" pkg="velocity_proj" type="velocity_proj" args="" output="screen">
+      <remap from="~/odom" to="pose_gt"/>
+    </node>
+  </group>
+</launch>

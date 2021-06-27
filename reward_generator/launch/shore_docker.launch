@@ -1,0 +1,31 @@
+
+<launch>
+  <arg name="namespace"     default=""/>
+  <arg name="dist_to_boey"  default="2.0" />
+  <arg name="dx_coef"       default="1.0" />
+  <arg name="dy_coef"       default="5.0" />
+  <arg name="dt_coef"       default="2.0" />
+
+  <group ns="/$(arg namespace)">
+    <node name="reward_dock_shore" pkg="reward_generator" type="shore_docker" args="" output="screen">
+      <remap from="~/laser"       to="front/scan"/>
+      <remap from="~/odom_robot"  to="pose_gt"/>
+      <remap from="~/odom_boey"   to="boey_pose"/>
+      <remap from="~/done"        to="agent/is_done"/>
+      <remap from="~/refresh"     to="server/episode_manager"/>
+
+      <param name="frame_size"      type="int"    value="64"/>
+      <param name="frame_padding"   type="int"    value="15"/>
+      <param name="laser_frame"     type="string" value="laser_frame"/>
+      <param name="front_dist"      type="double"  value="10.0"/>
+      <param name="dist_to_boey"    type="double"  value="$(arg dist_to_boey)"/>
+      <param name="rear_dist"       type="double"  value="6.0"/>
+      <param name="side_dist"       type="double"  value="8.0"/>
+      <param name="local_grid_res"  type="double"  value="0.25"/>
+      <param name="px_coeff"        type="double"  value="$(arg dx_coef)"/>
+      <param name="py_ceoff"        type="double"  value="$(arg dy_coef)"/>
+      <param name="yaw_coeff"       type="double"  value="$(arg dt_coef)"/>
+      <param name="proximity_coeff" type="double"  value="10.0"/>
+    </node>
+  </group>
+</launch>

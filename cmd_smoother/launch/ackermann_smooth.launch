@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="namespace" default=""/>
+  <group ns="/$(arg namespace)">
+    <node pkg="cmd_smoother" name="cmd_smoother" type="ackermann_smoother.py" output="screen">
+      <param name="rate" type="int" value="50"/>
+      <param name="beta" type="double" value="0.2"/>
+    </node>
+  </group>
+</launch>

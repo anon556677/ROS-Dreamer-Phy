@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Debug flag -->
+  <rosparam param="/use_sim_time">true</rosparam>
+
+  <!-- Vehicle's initial pose -->
+  <arg name="x"     default="0"/>
+  <arg name="y"     default="0"/>
+  <arg name="z"     value="0"/>
+  <arg name="roll"  value="0"/>
+  <arg name="pitch" value="0"/>
+  <arg name="yaw"   default="0"/>
+
+  <arg name="namespace" default=""/>
+
+  <group ns="/$(arg namespace)">
+
+
+    <group if="$(eval namespace == '')">
+      <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+      <node name="boey_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+            args="-urdf -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -model boey -param /boey_description"/>
+    </group>
+
+    <group unless="$(eval namespace == '')">
+      <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+      <node name="boey_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+	      args="-urdf -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -model $(arg namespace)/boey -param /$(arg namespace)/boey_description"/>
+    </group>
+
+  </group>
+
+  <!-- Launches Boey's description nodes -->
+  <include file="$(find boey_description)/launch/description.launch">
+    <arg name="namespace" value="$(arg namespace)" />
+  </include>
+
+</launch>

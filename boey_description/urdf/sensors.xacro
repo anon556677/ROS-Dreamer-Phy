@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- Mount a Perfect Pose 3D sensor. -->
+    <gazebo>
+      <plugin filename="libgazebo_ros_p3d.so" name="groundtruth_boey">
+        <updateRate>50.0</updateRate>
+        <robotNamespace>/$(arg namespace)</robotNamespace>
+        <bodyName>$(arg suffix_ns)boey_link</bodyName>
+        <topicName>/$(arg suffix_ns)boey_pose</topicName>
+        <gaussianNoise>0.0</gaussianNoise>
+        <frameName>world</frameName>
+      </plugin>
+    </gazebo>
+
+  </robot>

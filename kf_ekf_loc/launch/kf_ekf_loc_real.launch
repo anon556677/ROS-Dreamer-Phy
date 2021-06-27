@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="kf_ekf_loc" type="ekf.py" name="kf_ekf_loc" output="screen">
+      <param name="robot_frame" value="kingfisher/base" />
+      <param name="odom_frame" value="odom_ekf" />
+      <param name="gps_frame" value="kingfisher/gps" />
+      <param name="odom_as_parent" value="False" />
+      <param name="DEBUG" value="False" />
+      <remap from="cmd_drive" to="/cmd_drive"/>
+      <remap from="imu" to="/imu/data"/>
+      <remap from="rpy_imu" to="/imu/mag/ned/rpy"/>
+      <remap from="rpy_rtk" to="/rtk/mag/ned/rpy"/>
+      <remap from="rtk" to="/gps/fix"/>
+  </node>
+
+
+</launch>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Vehicle's namespace -->
+  <arg name="namespace" default=""/>
+
+  <group ns="/$(arg namespace)">
+
+    <group if="$(eval namespace == '')">
+      <param name="boey_description"
+             command="$(find xacro)/xacro.py '$(find boey_description)/urdf/boey.urdf.xacro'" />
+    </group>
+
+    <group unless="$(eval namespace == '')">
+      <param name="boey_description"
+             command="$(find xacro)/xacro.py '$(find boey_description)/urdf/boey.urdf.xacro' --inorder namespace:=$(arg namespace) suffix_ns:=$(arg namespace)/" />
+    </group>
+
+  </group>
+
+</launch>

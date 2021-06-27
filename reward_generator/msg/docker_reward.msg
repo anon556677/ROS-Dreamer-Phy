@@ -1,0 +1,4 @@
+float32 delta_x_reward
+float32 delta_y_reward
+float32 delta_yaw_reward
+float32 proximity_penalty

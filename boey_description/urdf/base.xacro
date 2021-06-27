@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+
+  <xacro:property name="radius" value="0.05" />
+  <xacro:property name="dist" value="0.5" />
+  <xacro:property name="length" value="3." /> 
+
+  <material name="dark_gray"><color rgba="0.2 0.2 0.2 1.0"/></material>
+  <material name="yellow"><color rgba="0.8 0.8 0.0 1.0"/></material>
+
+  <!-- Vehicle macro -->
+  <xacro:macro name="boey_base" params="namespace">
+
+    <link name="${namespace}boey_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="${radius}" length="${length}"/>
+            </geometry>
+            <material name="dark_gray" />
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="${radius}" length="${length}"/>
+            </geometry>
+        </collision>
+
+        <inertial>
+            <origin xyz="0 0 ${length/2}" rpy="0 0 0"/>
+            <mass value="100000"/>
+            <inertia
+                ixx="10000.0" ixy="0.0" ixz="0.0"
+                iyy="10000.0" iyz="0.0"
+                izz="10000.0"/>
+        </inertial>
+      </link>
+      
+    <link name="${namespace}boey_left">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="${radius}" length="${length}"/>
+            </geometry>
+            <material name="yellow" />
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="${radius}" length="${length}"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0 0 ${length/2}" rpy="0 0 0"/>
+            <mass value="100000"/>
+            <inertia
+                ixx="10000.0" ixy="0.0" ixz="0.0"
+                iyy="10000.0" iyz="0.0"
+                izz="10000.0"/>
+        </inertial>
+
+      </link>
+
+      <link name="${namespace}boey_right">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="${radius}" length="${length}"/>
+            </geometry>
+            <material name="yellow" />
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="${radius}" length="${length}"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0 0 ${length/2}" rpy="0 0 0"/>
+            <mass value="100000"/>
+            <inertia
+                ixx="10000.0" ixy="0.0" ixz="0.0"
+                iyy="10000.0" iyz="0.0"
+                izz="10000.0"/>
+        </inertial>
+      </link>
+      
+    <joint name="left_to_core" type="fixed">
+        <origin xyz="0 ${dist} 0" rpy="0 0 0"/>
+        <parent link="${namespace}boey_link" />
+        <child link="${namespace}boey_left" />
+      </joint>
+      
+      <joint name="right_to_core" type="fixed">
+        <origin xyz="0 -${dist} 0" rpy="0 0 0"/>
+        <parent link="${namespace}boey_link" />
+        <child link="${namespace}boey_right" />
+      </joint>
+
+    <gazebo reference="${namespace}boey_link">
+      <selfCollide>false</selfCollide>
+      <material>Gazebo/DarkGrey</material>
+      <laserRetro>200</laserRetro>
+    </gazebo>
+    
+    <gazebo reference="${namespace}boey_right">
+      <selfCollide>false</selfCollide>
+      <material>Gazebo/Yellow</material>
+      <laserRetro>200</laserRetro>
+    </gazebo>
+
+    <gazebo reference="${namespace}boey_left">
+      <selfCollide>false</selfCollide>
+      <material>Gazebo/Yellow</material>
+      <laserRetro>200</laserRetro>
+    </gazebo>
+
+    <!-- Include the sensor modules -->
+    <xacro:include filename="$(find boey_description)/urdf/sensors.xacro"/>
+
+    <gazebo>
+        <static>true</static>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

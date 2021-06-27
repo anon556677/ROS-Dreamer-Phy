@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<launch>
+    <node pkg="mag2rpy" name="mag2rpy_rtk" type="mag2rpy_node.py" output="screen">
+        <param name="path2statistics" type="string" value="$(find mag2rpy)/rtk-statistics.pkl"/> 
+	<param name="frame" type="string" value="kingfisher/imu"/> 
+        <param name="use_markers" type="bool" value="true"/> 
+        <param name="invert_yaw" type="bool" value="true"/> 
+        <param name="yaw_offset" type="double" value="1.570796"/> 
+    
+        <remap from="~mag"       to="/rtk/magnetic_field"/>
+	<remap from="~rpy_ned"       to="/rtk/mag/ned/rpy"/>
+	<remap from="~rpy_enu"       to="/rtk/mag/enu/rpy"/>
+	<remap from="~marker_ned"    to="/rtk/mag/ned/marker"/>
+	<remap from="~marker_enu"    to="/rtk/mag/enu/marker"/>
+    </node>
+</launch>

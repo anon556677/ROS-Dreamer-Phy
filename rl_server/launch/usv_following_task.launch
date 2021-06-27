@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="namespace"   default="" />
+  <arg name="server_port" default="8080" />
+  <arg name="curriculum"  default="none" />
+  <arg name="max_dist"    default="13" />
+  <arg name="min_dist"    default="6" />
+  <arg name="ideal_dist"  default="10" />
+  <arg name="target_vel"  default="1.0" />
+  <arg name="vel_coef"    default="1.0" />
+  <arg name="dist_coef"   default="2.5" />
+  <arg name="alpha"       default="1.0" />
+  <arg name="warmup"      default="0.25e6" />
+  <arg name="step_target" default="1.0e6" />
+  <arg name="max_current" default="0.0" />
+  <arg name="min_current" default="0.0" />
+  <arg name="max_density" default="1028" />
+  <arg name="min_density" default="1028" />
+  <arg name="max_damping" default="1.0" />
+  <arg name="min_damping" default="1.0" />
+  <arg name="max_weight"  default="0.0" />
+  <arg name="min_weight"  default="0.0" />
+  <arg name="play_rate"  default="12.0" />
+ 
+  <!-- Start simulating a Heron -->
+  <include file="$(find heron_gazebo)/launch/heron_sim.launch">
+    <arg name="x" value="200" />
+    <arg name="y" value="-60" />
+    <arg name="yaw" value="-0.5" />
+    <arg name="namespace" value="$(arg namespace)" />
+  </include>
+
+  <include file="$(find reward_generator)/launch/shore_follower.launch">
+    <arg name="namespace"  value="$(arg namespace)" />
+    <arg name="ideal_dist" value="$(arg ideal_dist)" />
+    <arg name="target_vel" value="$(arg target_vel)" />
+    <arg name="dist_coef"  value="$(arg dist_coef)" />
+    <arg name="vel_coef"   value="$(arg vel_coef)" />
+    <arg name="rate"       value="$(arg play_rate)" />
+  </include>
+
+  <include file="$(find cmd_smoother)/launch/drive_smooth.launch">
+    <arg name="namespace" value="$(arg namespace)" />
+  </include>
+
+  <include file="$(find rl_server)/launch/server/usv_following_server.launch">
+    <arg name="namespace"   value="$(arg namespace)" />
+    <arg name="server_port" value="$(arg server_port)" />
+    <arg name="curriculum"  value="$(arg curriculum)" />
+    <arg name="max_dist"    value="$(arg max_dist)" />
+    <arg name="min_dist"    value="$(arg min_dist)" />
+    <arg name="ideal_dist"  value="$(arg ideal_dist)" />
+    <arg name="alpha"       value="$(arg alpha)" />
+    <arg name="warmup"      value="$(arg warmup)" />
+    <arg name="step_target" value="$(arg step_target)" />
+    <arg name="max_current" value="$(arg max_current)" />
+    <arg name="min_current" value="$(arg min_current)" />
+    <arg name="max_density" value="$(arg max_density)" />
+    <arg name="min_density" value="$(arg min_density)" />
+    <arg name="max_damping" value="$(arg max_damping)" />
+    <arg name="min_damping" value="$(arg min_damping)" />
+    <arg name="max_weight"  value="$(arg max_weight)" />
+    <arg name="min_weight"  value="$(arg min_weight)" />
+  </include>
+
+  <include file="$(find velocity_proj)/launch/velproj.launch">
+    <arg name="namespace" value="$(arg namespace)" />
+  </include>
+</launch>

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!--Namespace-->
+  <arg name="namespace" default="" />
+  <!--Server-->
+  <arg name="server_port" default="8080" />
+  <!--Task parameters-->
+  <arg name="max_dist" default="13" />
+  <arg name="min_dist" default="6" />
+  <arg name="ideal_dist" default="10" />
+  <!--Curriculum-->
+  <arg name="curriculum" default="none" />
+  <arg name="alpha" default="1" />
+  <arg name="warmup" default="0.25e6" />
+  <arg name="step_target" default="1.0e6" />
+
+  <!-- STARTS SERVER -->
+  <group ns="/$(arg namespace)">
+    <group if="$(eval namespace == '')">
+      <node pkg="rl_server" name="usv_following_server" type="ugv_following_server.py" output="screen">
+        <!--Services-->
+        <param name="spawn_service" type="string" value="/gazebo/set_model_state" /> 
+        <!--Map-->
+        <param name="path_to_pose" type="string" value="$(find rl_server)/map_.npy" /> 
+        <!--Robot names-->
+        <param name="robot_name" type="string" value="husky" /> 
+        <!--Server-->
+        <param name="server_port" type="int" value="$(arg server_port)" />
+        <!--Task parameters-->
+        <param name="max_dist" type="double" value="$(arg max_dist)" />
+        <param name="min_dist" type="double" value="$(arg min_dist)" />
+        <param name="ideal_dist" type="double" value="$(arg ideal_dist)" />
+        <!--Curriculum-->
+        <param name="curriculum" type="string" value="$(arg curriculum)" />
+        <param name="alpha" type="double" value="$(arg alpha)" />
+        <param name="warmup" type="double" value="$(arg warmup)" />
+        <param name="step_target" type="double" value="$(arg step_target)" />
+      </node>
+    </group>
+    <group unless="$(eval namespace == '')">
+      <node pkg="rl_server" name="bridge_server_following" type="ugv_following_server.py" output="screen">
+        <!--Services-->
+        <param name="spawn_service" type="string" value="/gazebo/set_model_state" /> 
+        <!--Map-->
+        <param name="path_to_pose" type="string" value="$(find rl_server)/map_.npy" /> 
+        <!--Robot names-->
+        <param name="robot_name" type="string" value="$(arg namespace)/husky" /> 
+        <!--Server-->
+        <param name="server_port" type="int" value="$(arg server_port)" />
+        <!--Task parameters-->
+        <param name="max_dist" type="double" value="$(arg max_dist)" />
+        <param name="min_dist" type="double" value="$(arg min_dist)" />
+        <param name="ideal_dist" type="double" value="$(arg ideal_dist)" />
+        <!--Curriculum-->
+        <param name="curriculum" type="string" value="$(arg curriculum)" />
+        <param name="alpha" type="double" value="$(arg alpha)" />
+        <param name="warmup" type="double" value="$(arg warmup)" />
+        <param name="step_target" type="double" value="$(arg step_target)" />
+      </node>
+    </group>
+  </group>
+</launch>

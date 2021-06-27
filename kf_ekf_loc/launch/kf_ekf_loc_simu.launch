@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="kf_ekf_loc" type="ekf.py" name="kf_ekf_loc" output="screen">
+      <param name="robot_frame" value="robot2/base_link" />
+      <param name="odom_frame" value="odom_ekf" />
+      <param name="gps_frame" value="robot2/navsat_link" />
+      <remap from="cmd_drive" to="/robot2/cmd_drive"/>
+      <remap from="imu" to="/robot2/imu/data_raw"/>
+      <remap from="rpy_imu" to="/robot2/imu/rpy"/>
+      <remap from="rtk_imu" to="/rtk/rpy"/><!--does not exist in simu-->
+      <remap from="rtk" to="/robot2/navsat/fix"/>
+  </node>
+
+
+</launch>

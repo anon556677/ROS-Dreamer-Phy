@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="namespace" default=""/>
+
+  <arg name="x" default="200.0"/>
+  <arg name="y" default="-60.0"/>
+  <arg name="z" default="0.13"/>
+  <arg name="yaw" default="0.5"/>
+  
+  <group ns="/$(arg namespace)">
+    <!-- Load robot description -->
+    <include file="$(find husky_description)/launch/description.launch" >
+      <arg name="laser_enabled" default="true"/>
+      <arg name="realsense_enabled" default="false"/>
+      <arg name="urdf_extras" default="empty.urdf"/>
+      <arg name="namespace" default="$(arg namespace)"/>
+    </include>
+    
+    <!-- Load controller configuration -->
+    <rosparam command="load" file="$(find husky_control)/config/control.yaml" />
+
+    <!-- Override the default control parameters-->
+    <group unless="$(eval namespace == '')">
+      <arg name="left" default="[$(arg namespace)/front_left_wheel, $(arg namespace)/rear_left_wheel]"/>
+      <arg name="right" default="[$(arg namespace)/front_right_wheel, $(arg namespace)/rear_right_wheel]"/>
+      <rosparam param="husky_velocity_controller/left_wheel" subst_value="True">$(arg left)</rosparam> 
+      <rosparam param="husky_velocity_controller/right_wheel" subst_value="True">$(arg right)</rosparam> 
+    </group>
+    <!-- Spawn controllers -->
+    <node name="base_controller_spawner" pkg="controller_manager" type="spawner"
+          args="husky_joint_publisher husky_velocity_controller"/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+    <node pkg="twist_mux" type="twist_mux" name="twist_mux">
+      <rosparam command="load" file="$(find husky_control)/config/twist_mux.yaml" />
+      <remap from="cmd_vel_out" to="husky_velocity_controller/cmd_vel"/>
+    </node>
+
+    <!-- Spawn robot in gazebo -->
+    <group if="$(eval namespace=='')">
+      <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+          args="-x $(arg x) -y $(arg y) -z $(arg z) -Y $(arg yaw) -unpause -urdf -param /robot_description -model husky" />
+    </group>
+    <group unless="$(eval namespace=='')">
+      <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+          args="-x $(arg x) -y $(arg y) -z $(arg z) -Y $(arg yaw) -unpause -urdf -param /$(arg namespace)/robot_description -model $(arg namespace)/husky" />
+    </group>
+  </group>
+</launch>

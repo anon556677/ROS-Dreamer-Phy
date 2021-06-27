@@ -1,0 +1,2 @@
+float32 distance_reward
+float32 velocity_reward
